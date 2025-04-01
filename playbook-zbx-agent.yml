@@ -1,0 +1,60 @@
+- name: Install Zabbix agent
+  hosts: web_servers
+  become: yes
+
+  tasks:
+    - name: Install required packages
+      apt:
+        name: ["zabbix-agent"]
+        state: present
+
+    - name: Create the directory for Zabbix agent log file
+      file:
+        path: /var/log/zabbix
+        state: directory
+        owner: zabbix
+        group: zabbix
+        mode: "0755"
+
+    - name: Create the directory for additional Zabbix agent configurations
+      file:
+        path: /etc/zabbix/zabbix_agentd.d
+        state: directory
+        owner: root
+        group: root
+        mode: "0755"
+
+    - name: Copy Zabbix Agent configuration file
+      copy:
+        src: /home/artem/netology/sys-diplom1/my-diplom-sys/zabbix_agent.conf
+        dest: /etc/zabbix/zabbix_agentd.conf
+        owner: root
+        group: root
+        mode: "0644"
+
+    - name: Ensure 'Include' directive is commented if present
+      lineinfile:
+        path: /etc/zabbix/zabbix_agentd.conf
+        regexp: '^Include'
+        line: '# Include=/etc/zabbix/zabbix_agentd.d/*.conf'
+        state: present
+
+    - name: Start and enable Zabbix Agent service
+      service:
+        name: zabbix-agent
+        state: started
+        enabled: yes
+
+    - name: Restart Zabbix Agent to apply changes
+      service:
+        name: zabbix-agent
+        state: restarted
+      when: ansible_facts['os_family'] == "Debian"
+
+    - name: Ensure Zabbix agent can write to its log file
+      file:
+        path: /var/log/zabbix/zabbix_agentd.log
+        state: touch
+        owner: zabbix
+        group: zabbix
+        mode: "0644"

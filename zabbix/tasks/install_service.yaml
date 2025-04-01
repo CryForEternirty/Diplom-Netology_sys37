@@ -1,0 +1,43 @@
+---
+  - name: install zabbix-server-pgsql
+    become: yes
+    ansible.builtin.apt:
+      name:
+      - zabbix-server-pgsql
+      state: present
+
+  - name: install zabbix-frontend-php
+    become: yes
+    ansible.builtin.apt:
+      name:
+      - zabbix-frontend-php
+      state: present
+  
+  - name: install php8.1-pgsql
+    become: yes
+    ansible.builtin.apt:
+      name:
+      - php8.1-pgsql
+      state: present
+
+  - name: install zabbix-apache-conf
+    become: yes
+    ansible.builtin.apt:
+      name:
+      - zabbix-apache-conf
+      state: present
+
+  - name: install zabbix-sql-scripts
+    become: yes
+    ansible.builtin.apt:
+      name:
+      - zabbix-sql-scripts
+      state: present
+
+  - name: install zabbix-agent
+    become: yes
+    ansible.builtin.apt:
+      name:
+      - zabbix-agent
+      state: present
+

@@ -1,0 +1,23 @@
+---
+- name: Test Connection to my servres
+  hosts: web_servers
+  become: yes
+
+  tasks:
+    - name: update apt packages
+      apt:
+        force_apt_get: true
+        upgrade: dist
+        update_cache: yes
+      become: true
+
+    - name: Install nginx on all servers
+      apt: name=nginx state=latest  update_cache=yes
+
+    - name: copy index_new.html
+      ansible.builtin.copy:
+        src: /home/artem/netology/sys-diplom1/my-diplom-sys/index.html
+        dest: /var/www/html/index.html
+        owner: root
+        group: sudo
+        mode: "0644"

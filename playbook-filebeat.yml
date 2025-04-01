@@ -1,0 +1,46 @@
+- name: Install Filebeat
+  hosts: web_servers
+  become: yes
+
+  tasks:
+    - name: Update apt cache
+      apt:
+        update_cache: yes
+
+    - name: Install prerequisites
+      apt:
+        name:
+          - apt-transport-https
+          - gnupg
+        state: present
+
+    - name: Download Filebeat from Yandex mirror
+      ansible.builtin.get_url:
+        url: https://mirror.yandex.ru/mirrors/elastic/7/pool/main/f/filebeat/filebeat-7.17.7-amd64.deb
+        dest: /tmp/filebeat-7.17.7-amd64.deb
+
+    - name: Install Filebeat
+      apt:
+        deb: /tmp/filebeat-7.17.7-amd64.deb
+
+    - name: Deploy Filebeat configuration
+      template:
+        src: /home/artem/netology/sys-diplom1/my-diplom-sys/elasticsearch/filebeat.yml
+        dest: /etc/filebeat/filebeat.yml
+        owner: root
+        group: root
+        mode: '0600'
+      notify:
+        - Restart Filebeat
+
+    - name: Enable and start Filebeat
+      systemd:
+        name: filebeat
+        enabled: yes
+        state: started
+
+  handlers:
+    - name: Restart Filebeat
+      systemd:
+        name: filebeat
+        state: restarted

@@ -1,0 +1,8 @@
+cluster.name: "Kubatin_AV_diplom"
+node.name: maestro
+path.data: /var/lib/elasticsearch
+path.logs: /var/log/elasticsearch
+network.host: 0.0.0.0
+http.port: 9200
+discovery.seed_hosts: ["127.0.0.1"]
+discovery.type: single-node

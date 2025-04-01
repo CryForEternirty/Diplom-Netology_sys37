@@ -1,0 +1,5 @@
+---
+- hosts: zabbix
+  become: true
+  roles:
+    - zabbix

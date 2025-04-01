@@ -1,0 +1,9 @@
+---
+# tasks file for zabbix
+  - import_tasks: install_postgres.yaml
+  - import_tasks: download_repo.yaml
+  - import_tasks: install_service.yaml
+  - import_tasks: database.yaml
+  - import_tasks: config_setting.yaml
+  - import_tasks: start_service.yaml
+

@@ -1,0 +1,45 @@
+- name: Install Kibana
+  hosts: kibana
+  become: yes
+
+  tasks:
+    - name: Update apt cache
+      apt:
+        update_cache: yes
+
+    - name: Install dependencies
+      apt:
+        name:
+          - apt-transport-https
+          - gnupg
+        state: present
+
+    - name: Download Kibana 7.17.7
+      ansible.builtin.get_url:
+        url: https://mirror.yandex.ru/mirrors/elastic/7/pool/main/k/kibana/kibana-7.17.7-amd64.deb
+        dest: /home/user/kibana-7.17.7-amd64.deb
+
+    - name: Install Kibana
+      apt:
+        deb: /home/user/kibana-7.17.7-amd64.deb
+
+    - name: Copy custom Kibana config
+      copy:
+        src: /home/artem/netology/sys-diplom1/my-diplom-sys/elasticsearch/kibana.yml
+        dest: /etc/kibana/kibana.yml
+        owner: root
+        group: root
+        mode: '0644'
+      notify: Restart Kibana
+
+    - name: Ensure Kibana is enabled and started
+      systemd:
+        name: kibana.service
+        enabled: yes
+        state: started
+
+  handlers:
+    - name: Restart Kibana
+      systemd:
+        name: kibana.service
+        state: restarted

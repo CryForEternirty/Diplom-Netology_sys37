@@ -1,0 +1,19 @@
+---
+  - name: restart zabbix-server service
+    ansible.builtin.service:
+      name: zabbix-server
+      state: restarted
+      enabled: true
+
+  - name: restart zabbix-agent service
+    ansible.builtin.service:
+      name: zabbix-agent
+      state: restarted
+      enabled: true
+
+  - name: restart apache2 service
+    ansible.builtin.service:
+      name: apache2
+      state: restarted
+      enabled: true
+

@@ -1,0 +1,14 @@
+---
+  - name: create zabbix user
+    ansible.builtin.command: su - postgres -c 'psql --command "CREATE USER zabbix  WITH PASSWORD '\'12345\'';"'
+    ignore_errors: yes
+
+  - name: create zabbix database
+    ansible.builtin.command: su - postgres -c 'psql --command "CREATE DATABASE zabbix OWNER zabbix;"'
+    ignore_errors: yes
+
+  - name: import scheme
+    become: yes
+    ansible.builtin.shell: zcat /usr/share/zabbix-sql-scripts/postgresql/server.sql.gz | sudo -u zabbix psql zabbix
+    ignore_errors: yes
+

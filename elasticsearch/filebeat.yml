@@ -1,0 +1,22 @@
+
+
+filebeat.inputs:
+  - type: log
+    enabled: true
+    paths:
+      - /var/log/nginx/access.log
+      - /var/log/nginx/error.log
+    fields:
+      log_type: nginx  
+    fields_under_root: true
+
+setup.ilm.enabled: false
+setup.template.name: "nginx-logs"
+setup.template.pattern: "nginx-logs-*"
+
+output.elasticsearch:
+  hosts: ["http://192.168.40.40:9200"]
+  indices:
+    - index: "nginx-logs-%{+yyyy.MM.dd}"
+      when.contains:
+        log_type: "nginx"

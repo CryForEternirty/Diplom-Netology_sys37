@@ -1,0 +1,13 @@
+---  
+  - name: replace the line password
+    ansible.builtin.lineinfile:
+      path: /etc/zabbix/zabbix_server.conf
+      regexp: '^# DBPassword=$'
+      line: 'DBPassword=12345'
+
+#  - name: replace the line port 8080
+#    ansible.builtin.lineinfile:
+#      path: /etc/zabbix/nginx.conf
+#      regexp: '^#        listen          8080;$'
+#      line: '        listen          8080;'
+
